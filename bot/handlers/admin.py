@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 
 from bot.database import db
 from filters import IsAdmin
-from keyboards.admin_kb import (
+from bot.keyboards.admin_kb import (
     admin_main_menu,
     booking_manage_keyboard
 )
