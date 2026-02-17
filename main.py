@@ -1,33 +1,41 @@
 import asyncio
-import os
+import logging
+
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message
-from aiogram.filters import CommandStart
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+from config import config
+from database import connect_db
+from models import create_tables
 
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN topilmadi!")
-
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
-
-
-@dp.message(CommandStart())
-async def start_handler(message: Message):
-    kb = InlineKeyboardBuilder()
-    kb.button(text="🏢 PlayStation", callback_data="ps")
-    kb.button(text="🎤 Karaoke", callback_data="karaoke")
-    kb.adjust(1)
-
-    await message.answer(
-        "Xush kelibsiz!\nBo‘limni tanlang:",
-        reply_markup=kb.as_markup()
-    )
+# Routers
+from handlers.user import router as user_router
+from handlers.admin import router as admin_router
+from handlers.superadmin import router as superadmin_router
 
 
 async def main():
+    logging.basicConfig(level=logging.INFO)
+
+    # Bot yaratish
+    bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
+    dp = Dispatcher(storage=MemoryStorage())
+
+    # Database ulanish
+    await connect_db()
+    await create_tables()
+
+    print("✅ Database connected")
+
+    # Routerlarni ulash
+    dp.include_router(user_router)
+    dp.include_router(admin_router)
+    dp.include_router(superadmin_router)
+
+    print("🚀 Bot ishga tushdi")
+
+    # Polling
     await dp.start_polling(bot)
 
 
