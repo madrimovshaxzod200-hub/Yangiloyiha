@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from database import db
+from bot.database import db
 from filters import IsSuperAdmin
 from keyboards.superadmin_kb import (
     superadmin_main_menu,
