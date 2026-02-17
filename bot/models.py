@@ -1,4 +1,4 @@
-from database import db
+from bot.database import db
 
 
 async def create_tables():
