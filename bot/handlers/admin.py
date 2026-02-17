@@ -8,8 +8,8 @@ from bot.keyboards.admin_kb import (
     admin_main_menu,
     booking_manage_keyboard
 )
-from states import AdminStates
-from config import config
+from bot.states import AdminStates
+from bot.config import config
 
 router = Router()
 
