@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 
 from bot.database import db
 from filters import IsSuperAdmin
-from keyboards.superadmin_kb import (
+from bot.keyboards.superadmin_kb import (
     superadmin_main_menu,
     section_select_keyboard,
     admin_section_keyboard
