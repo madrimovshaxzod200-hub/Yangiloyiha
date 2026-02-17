@@ -4,8 +4,8 @@ from aiogram.fsm.context import FSMContext
 
 from bot.database import db
 from bot.keyboards.user_kb import main_menu, sections_keyboard, units_keyboard
-from states import BookingStates
-from filters import NotBlocked
+from bot.states import BookingStates
+from bot.filters import NotBlocked
 
 router = Router()
 
