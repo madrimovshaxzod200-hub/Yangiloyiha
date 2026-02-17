@@ -1,5 +1,5 @@
-from database import db
-from config import config
+from bot.database import db
+from bot.config import config
 
 
 # =========================================
