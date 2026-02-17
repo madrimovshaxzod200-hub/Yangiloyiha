@@ -1,16 +1,16 @@
 import os
+import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils import executor
 from dotenv import load_dotenv
 
 # ================== Environment variables ==================
-load_dotenv()  # .env fayldan o'qish
+load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 SUPER_ADMIN_ID = int(os.getenv("SUPER_ADMIN_ID"))
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
 # ================== Temporary storage ==================
 sections = {}  # {'Bo‘lim nomi': {'categories': [], 'admin_id': None}}
@@ -25,7 +25,7 @@ def super_admin_menu():
     return keyboard
 
 # ================== /start komandasi ==================
-@dp.message_handler(commands=['start'])
+@dp.message(commands=['start'])
 async def start(message: types.Message):
     user_id = message.from_user.id
     if user_id == SUPER_ADMIN_ID:
@@ -42,7 +42,7 @@ def section_management_menu():
     return keyboard
 
 # ================== Callback query ==================
-@dp.callback_query_handler(lambda c: True)
+@dp.callback_query()
 async def callbacks(call: types.CallbackQuery):
     data = call.data
     if data.startswith("add_section_"):
@@ -64,6 +64,9 @@ async def callbacks(call: types.CallbackQuery):
     await call.answer()
 
 # ================== Bot ishga tushirish ==================
+async def main():
+    dp.startup.register(lambda _: print("Bot ishga tushdi..."))
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
-    print("Bot Railway-ready ishga tushdi...")
-    executor.start_polling(dp, skip_updates=True)
+    asyncio.run(main())
