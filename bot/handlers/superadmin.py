@@ -17,13 +17,13 @@ router = Router()
 # =========================================
 # SUPER ADMIN PANEL
 # =========================================
-@router.message(F.text == "superadmin"))
+
+@router.message(Command("superadmin"))
 async def superadmin_panel(message: Message):
     await message.answer(
         "👑 Super Admin Panel",
         reply_markup=superadmin_main_menu()
     )
-
 
 # =========================================
 # SECTION QO‘SHISH
