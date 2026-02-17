@@ -17,7 +17,7 @@ router = Router()
 # =========================================
 # SUPER ADMIN PANEL
 # =========================================
-@router.message(F.text == "superadmin", ))
+@router.message(F.text == "superadmin"))
 async def superadmin_panel(message: Message):
     await message.answer(
         "👑 Super Admin Panel",
