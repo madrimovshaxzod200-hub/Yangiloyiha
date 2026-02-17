@@ -9,7 +9,7 @@ from bot.keyboards.superadmin_kb import (
     section_select_keyboard,
     admin_section_keyboard
 )
-from states import SuperAdminStates
+from bot.states import SuperAdminStates
 
 router = Router()
 
