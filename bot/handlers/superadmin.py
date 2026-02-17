@@ -13,6 +13,12 @@ from bot.states import SuperAdminStates
 
 router = Router()
 
+@router.message(Command("superadmin"))
+async def super_admin_panel(message: Message):
+    await message.answer(
+        f"ENV ID: {config.SUPER_ADMIN_ID}\n"
+        f"USER ID: {message.from_user.id}"
+    )
 
 # =========================================
 # SUPER ADMIN PANEL
