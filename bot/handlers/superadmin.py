@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from bot.database import db
-from filters import IsSuperAdmin
+from bot.filters import IsSuperAdmin
 from bot.keyboards.superadmin_kb import (
     superadmin_main_menu,
     section_select_keyboard,
