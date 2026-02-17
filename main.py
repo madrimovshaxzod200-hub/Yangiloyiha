@@ -1,68 +1,71 @@
-import asyncio
-import logging
+import os
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler
 
-from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.default import DefaultBotProperties
+# ================== Environment Variables ==================
+TOKEN = os.getenv("BOT_TOKEN")
+SUPER_ADMIN_ID = int(os.getenv("SUPER_ADMIN_ID"))
 
-from bot.config import config
-from bot.database import connect_db
-from bot.models import create_tables
+# ================== Data Storage (temporary, SQLite bilan almashtiriladi keyin) ==================
+sections = {}  # {'Bo‘lim nomi': {'categories': ['Kat1','Kat2'], 'admin_id': None}}
+applications = []  # [{'user_id': , 'section': , 'category': , 'status': 'pending'}]
 
-from bot.handlers.user import router as user_router
-from bot.handlers.admin import router as admin_router
-from bot.handlers.superadmin import router as superadmin_router
+# ================== Super Admin Menyu ==================
+def super_admin_menu():
+    keyboard = [
+        ["🟢 Bo‘limlarni boshqarish", "🟢 Kategoriyalarni boshqarish"],
+        ["🟢 Arizalarni ko‘rish"]
+    ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
-
-async def main():
-    # =========================
-    # LOGGING
-    # =========================
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-    )
-
-    logging.info("Bot ishga tushmoqda...")
-
-    # =========================
-    # DATABASE CONNECT
-    # =========================
-    await connect_db()
-    await create_tables()
-    logging.info("Database ulandi va jadvallar tayyor.")
-
-    # =========================
-    # BOT INIT
-    # =========================
-    bot = Bot(
-        token=config.BOT_TOKEN,
-        default=DefaultBotProperties(
-            parse_mode=ParseMode.HTML
+# ================== /start komandasi ==================
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    if user_id == SUPER_ADMIN_ID:
+        await update.message.reply_text(
+            "Salom Super Admin! Asosiy menyu:", 
+            reply_markup=super_admin_menu()
         )
-    )
+    else:
+        await update.message.reply_text("Siz foydalanuvchi sifatida kirishingiz mumkin. Menyu keyin qo‘shiladi.")
 
-    # =========================
-    # DISPATCHER
-    # =========================
-    dp = Dispatcher(storage=MemoryStorage())
+# ================== Callback tugmalar ==================
+async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    data = query.data
 
-    # Routers
-    dp.include_router(user_router)
-    dp.include_router(admin_router)
-    dp.include_router(superadmin_router)
+    # Bo‘lim qo‘shish (misol)
+    if data.startswith("add_section_"):
+        section_name = data.replace("add_section_", "")
+        if section_name not in sections:
+            sections[section_name] = {"categories": [], "admin_id": None}
+            await query.edit_message_text(f"Bo‘lim qo‘shildi: {section_name}")
+        else:
+            await query.edit_message_text("Bu bo‘lim allaqachon mavjud.")
+    elif data.startswith("del_section_"):
+        section_name = data.replace("del_section_", "")
+        if section_name in sections:
+            del sections[section_name]
+            await query.edit_message_text(f"Bo‘lim o‘chirildi: {section_name}")
+        else:
+            await query.edit_message_text("Bunday bo‘lim topilmadi.")
+    else:
+        await query.edit_message_text(f"Siz tugmani bosdingiz: {data}")
 
-    logging.info("Routerlar ulandi. Polling boshlanmoqda...")
+# ================== Super Admin Bo‘lim Menyusi ==================
+def section_management_menu():
+    keyboard = []
+    for sec in sections.keys():
+        keyboard.append([InlineKeyboardButton(f"❌ {sec}", callback_data=f"del_section_{sec}")])
+    keyboard.append([InlineKeyboardButton("➕ Yangi bo‘lim qo‘shish", callback_data="add_section_new")])
+    return InlineKeyboardMarkup(keyboard)
 
-    # =========================
-    # START POLLING
-    # =========================
-    await dp.start_polling(bot)
+# ================== Bot ishga tushirish ==================
+app = ApplicationBuilder().token(TOKEN).build()
 
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CallbackQueryHandler(button))
 
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except (KeyboardInterrupt, SystemExit):
-        logging.info("Bot to'xtatildi.")
+print("Bot Railway-ready ishga tushdi...")
+app.run_polling()
