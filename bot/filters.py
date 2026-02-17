@@ -1,7 +1,7 @@
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, CallbackQuery
 from config import config
-from database import db
+from bot.database import db
 
 
 # ==============================
