@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import Command
+
 
 from bot.database import db
 from bot.filters import IsSuperAdmin
@@ -18,6 +18,7 @@ router = Router()
 # =========================================
 # SUPER ADMIN PANEL
 # =========================================
+from aiogram.filters import Command
 
 @router.message(Command("superadmin"))
 async def superadmin_panel(message: Message):
