@@ -14,7 +14,7 @@ router = Router()
 # =========================================
 # START
 # =========================================
-@router.message(CommandStart(), NotBlocked())
+@router.message(CommandStart()
 async def start_handler(message: Message):
     user = await db.fetchrow(
         "SELECT * FROM users WHERE telegram_id = $1",
