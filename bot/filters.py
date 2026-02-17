@@ -1,6 +1,6 @@
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, CallbackQuery
-from config import config
+from bot.config import config
 from bot.database import db
 
 
