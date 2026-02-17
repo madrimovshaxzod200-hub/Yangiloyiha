@@ -3,8 +3,8 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 
 # ================== TOKEN VA SUPER ADMIN ==================
-BOT_TOKEN = "SIZNING_BOT_TOKEN_HOZIR_SHU YERGA"
-SUPER_ADMIN_ID = 123456789  # Sizning Telegram ID
+BOT_TOKEN = "8565639582:AAELDRSjNaqTiLlu0O6_Ksd9D9zFSnzGwOg"
+SUPER_ADMIN_ID = 6780565815  # Sizning Telegram ID
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
