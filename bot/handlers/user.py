@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from database import db
+from bot.database import db
 from keyboards.user_kb import main_menu, sections_keyboard, units_keyboard
 from states import BookingStates
 from filters import NotBlocked
