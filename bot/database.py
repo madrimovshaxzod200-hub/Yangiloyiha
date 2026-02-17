@@ -134,3 +134,7 @@ async def create_tables():
     """)
 
     print("Database jadvallari yaratildi.")
+
+async def connect_db():
+    await db.connect()
+    await create_tables()
