@@ -1,21 +1,18 @@
-import os
 import asyncio
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
-from dotenv import load_dotenv
 
-# ================== Environment variables ==================
-load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
-SUPER_ADMIN_ID = int(os.getenv("SUPER_ADMIN_ID"))
+# ================== TOKEN VA SUPER ADMIN ==================
+BOT_TOKEN = "SIZNING_BOT_TOKEN_HOZIR_SHU YERGA"
+SUPER_ADMIN_ID = 123456789  # Sizning Telegram ID
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# ================== Temporary storage ==================
+# ================== TEMPORARY STORAGE ==================
 sections = {}  # {'Bo‘lim nomi': {'categories': [], 'admin_id': None}}
 
-# ================== Super Admin reply keyboard ==================
+# ================== SUPER ADMIN REPLY KEYBOARD ==================
 def super_admin_menu():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(KeyboardButton("🟢 Bo‘limlarni boshqarish"))
@@ -24,12 +21,24 @@ def super_admin_menu():
     return keyboard
 
 # ================== START COMMAND ==================
-@dp.message(F.text == "/start")
+@dp.message(lambda message: message.text and message.text.startswith("/start"))
 async def start(message: types.Message):
-    if message.from_user.id == SUPER_ADMIN_ID:
+    user_id = message.from_user.id
+
+    # Super Admin
+    if user_id == SUPER_ADMIN_ID:
         await message.answer("Salom Super Admin! Asosiy menyu:", reply_markup=super_admin_menu())
-    else:
-        await message.answer("Siz foydalanuvchi sifatida kirishingiz mumkin. Keyin foydalanuvchi menyusi qo‘shiladi.")
+        return
+
+    # Bo‘lim admini
+    for sec_name, info in sections.items():
+        if info.get("admin_id") == user_id:
+            await message.answer(f"Salom {sec_name} bo‘lim admini! Bo‘lim paneli:", 
+                                 reply_markup=category_management_menu(sec_name))
+            return
+
+    # Oddiy foydalanuvchi
+    await message.answer("Siz foydalanuvchi sifatida kirishingiz mumkin. Keyin foydalanuvchi menyusi qo‘shiladi.")
 
 # ================== SECTION MANAGEMENT MENU ==================
 def section_management_menu():
@@ -60,6 +69,7 @@ def category_management_menu(section_name):
 async def show_sections(message: types.Message):
     if not sections:
         await message.answer("Hozircha bo‘limlar mavjud emas.")
+        return
     await message.answer("Bo‘lim boshqaruv paneli:", reply_markup=section_management_menu())
 
 @dp.message(F.text == "🟢 Kategoriyalarni boshqarish")
