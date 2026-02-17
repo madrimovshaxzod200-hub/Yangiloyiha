@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from bot.database import db
-from keyboards.user_kb import main_menu, sections_keyboard, units_keyboard
+from bot.keyboards.user_kb import main_menu, sections_keyboard, units_keyboard
 from states import BookingStates
 from filters import NotBlocked
 
