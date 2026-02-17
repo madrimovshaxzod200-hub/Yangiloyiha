@@ -32,8 +32,10 @@ async def main():
 
     # Bot
     bot = Bot(
-        token=config.BOT_TOKEN,
+    token=config.BOT_TOKEN,
+    default=DefaultBotProperties(
         parse_mode=ParseMode.HTML
+    )
     )
 
     # Dispatcher
