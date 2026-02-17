@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-
 # Lokal test uchun .env faylni o‘qiydi
 load_dotenv()
 
@@ -29,6 +28,9 @@ class Config:
             self.SUPER_ADMIN_ID: int = int(os.getenv("SUPER_ADMIN_ID", "0"))
         except ValueError:
             raise ValueError("SUPER_ADMIN_ID noto‘g‘ri formatda!")
+
+        if self.SUPER_ADMIN_ID == 0:
+            raise ValueError("SUPER_ADMIN_ID kiritilmagan!")
 
         # ===============================
         # SECURITY SETTINGS
