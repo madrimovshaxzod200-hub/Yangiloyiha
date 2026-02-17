@@ -1,5 +1,7 @@
 import asyncpg
-from bot.config import DATABASE_URL
+from bot.config import config
+
+DATABASE_URL = config.DATABASE_URL
 
 
 class Database:
