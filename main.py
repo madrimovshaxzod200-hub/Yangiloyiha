@@ -14,11 +14,14 @@ sections = {}  # {'Bo‘lim nomi': {'categories': [], 'admin_id': None}}
 
 # ================== SUPER ADMIN REPLY KEYBOARD ==================
 def super_admin_menu():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(KeyboardButton("🟢 Bo‘limlarni boshqarish"))
-    keyboard.add(KeyboardButton("🟢 Kategoriyalarni boshqarish"))
-    keyboard.add(KeyboardButton("🟢 Arizalarni ko‘rish"))
-    return keyboard
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🟢 Bo‘limlarni boshqarish")],
+            [KeyboardButton(text="🟢 Kategoriyalarni boshqarish")],
+            [KeyboardButton(text="🟢 Arizalarni ko‘rish")]
+        ],
+        resize_keyboard=True
+    )
 
 # ================== START COMMAND ==================
 @dp.message(lambda message: message.text and message.text.startswith("/start"))
