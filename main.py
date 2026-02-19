@@ -16,6 +16,11 @@ from aiogram.types import (
 from aiogram.filters import Command
 from aiogram.enums import ContentType
 
+@router.message(F.text == "/init_db")
+async def init_db(message: Message):
+    await db.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN DEFAULT FALSE;")
+    await message.answer("✅ users table yangilandi!")
+
 
 # =========================================
 # CONFIG
@@ -97,10 +102,6 @@ async def init_db():
     );
     """)
 
-@router.message(F.text == "/init_db")
-async def init_db(message: Message):
-    await db.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN DEFAULT FALSE;")
-    await message.answer("✅ users table yangilandi!")
 
 # =========================================
 # KEYBOARDS
