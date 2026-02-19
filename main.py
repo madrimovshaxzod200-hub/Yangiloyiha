@@ -718,6 +718,14 @@ async def my_bookings(message: Message):
 
     await message.answer(text)
 
+# =========================================
+# FALLBACK HANDLER
+# =========================================
+
+@dp.message()
+async def fallback_handler(message: Message):
+    print("Kelgan xabar:", message.text)
+
 
 # =========================================
 # MAIN
