@@ -4,7 +4,7 @@ import os
 import asyncpg
 from datetime import datetime
 
-from aiogram import Bot, Dispatcher, F
+from aiogram import Bot, Dispatcher, Router, F
 from aiogram.types import (
     Message,
     CallbackQuery,
