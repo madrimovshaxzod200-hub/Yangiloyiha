@@ -21,7 +21,7 @@ from aiogram.enums import ContentType
 # CONFIG
 # =========================================
 
-BOT_TOKEN = "8565639582:AAELDRSjNaqTiLlu0O6_Ksd9D9zFSnzGwOg""
+BOT_TOKEN = "8565639582:AAELDRSjNaqTiLlu0O6_Ksd9D9zFSnzGwOg"
 SUPER_ADMIN_ID = 6780565815  # O'ZINGNI ID
 
 DATABASE_URL = os.getenv("DATABASE_URL")
